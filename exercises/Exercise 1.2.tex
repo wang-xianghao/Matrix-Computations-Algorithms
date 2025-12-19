@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{algorithm, algpseudocodex}
+\usepackage{bm}
+\usepackage{parskip}
+
+\author{Xianghao Wang}
+\title{Matrix Computations Exercise 1.2}
+\begin{document}
+\maketitle
+
+\section*{Question 10}
+\begin{align*}
+    \bm{X}\bm{Y}^T & = (\bm{A}+\bm{u}\bm{v}^T)^k - \bm{A}^k                                                                 \\
+                   & = \left[\sum_{r=0}^{k} \binom{k}{r} \bm{A}^{k-r} (\bm{u}\bm{v}^T)^r\right] - \bm{A}^k                  \\
+                   & = \sum_{r=1}^k \binom{k}{r} \bm{A}^{k-r} (\bm{u}\bm{v}^T)^r                                            \\
+                   & = \sum_{r=1}^k \left[\binom{k}{r} \bm{A}^{k-r}\bm{u}\right]\left[\bm{v}^T(\bm{u}\bm{v}^T)^{r-1}\right] \\
+                   & =
+    \begin{bmatrix}
+        \binom{k}{1} \bm{A}^{k-1}\bm{u} &
+        \binom{k}{2} \bm{A}^{k-2}\bm{u} &
+        \dots                           &
+        \binom{k}{k} \bm{A}^{k-k}\bm{u}
+    \end{bmatrix}
+    \begin{bmatrix}
+        \bm{v}^T(\bm{u}\bm{v}^T)^0 \\
+        \bm{v}^T(\bm{u}\bm{v}^T)^1 \\
+        \vdots                     \\
+        \bm{v}^T(\bm{u}\bm{v}^T)^{k-1}
+    \end{bmatrix}
+\end{align*}
+
+Thus, we have:
+\begin{equation*}
+    \bm{X} =
+    \begin{bmatrix}
+        \binom{k}{1} \bm{A}^{k-1}\bm{u} &
+        \binom{k}{2} \bm{A}^{k-2}\bm{u} &
+        \dots                           &
+        \binom{k}{k} \bm{A}^{k-k}\bm{u}
+    \end{bmatrix}
+\end{equation*}
+\begin{equation*}
+    \bm{Y} =
+    \begin{bmatrix}
+        (\bm{v}\bm{u}^T)^0\bm{v}  &
+        (\bm{v}\bm{u}^T)^1 \bm{v} &
+        \dots                     &
+        (\bm{v}\bm{u}^T)^{k-1}\bm{v}
+    \end{bmatrix}
+\end{equation*}
+
+
+We compute each column $j$ of $\bm{X}$ via the following algorithm.
+It takes ${2(k-1)n^2+kn}$ flops.
+
+\begin{algorithm}
+    \begin{algorithmic}[1]
+        \State $\bm{x} = \bm{u}$
+        \For{$j=k:1$}
+        \State $X(:,j) = \binom{k}{j}\bm{x}$ \Comment{$n$}
+
+        \If{$j\neq 1$}
+        \State $\bm{x} = \bm{A}\bm{x}$ \Comment{$2n^2$}
+        \EndIf
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+To compute $\bm{Y}$, we rewrite each column $j$ to $\bm{v}(\bm{u}^T\bm{v})^{j-1}$ to get rid of matrix-vector multiplications.
+It takes $2n+(k-1)n$ flops.
+
+\begin{algorithm}[H]
+    \begin{algorithmic}[1]
+        \State $a=\bm{u}^T\bm{v}$ \Comment{$2n$}
+        \State $\bm{y}=\bm{v}$
+        \For{$j=1:k$}
+        \State $Y(:,j) = \bm{y}$
+        \If{$j\neq 1$}
+        \State $\bm{y}=a\bm{y}$ \Comment{$n$}
+        \EndIf
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+In total, computing $\bm{X}$ and $\bm{Y}$ takes approximate $2kn^2$ flops.
+
+\end{document}
