@@ -10,6 +10,8 @@
 \begin{document}
 \maketitle
 
+\newcommand{\floor}[1]{\lfloor#1\rfloor}
+
 \section*{Question 10}
 \begin{align*}
     \bm{X}\bm{Y}^T & = (\bm{A}+\bm{u}\bm{v}^T)^k - \bm{A}^k                                                                 \\
@@ -85,5 +87,39 @@ It takes $2n+(k-1)n$ flops.
 \end{algorithm}
 
 In total, computing $\bm{X}$ and $\bm{Y}$ takes approximate $2kn^2$ flops.
+
+\section*{Question 12}
+\textbf{Note:} We use $0$-based indexing for simplification.
+
+Suppose row $i$ of $\mathcal{P}_{pr}$ is row $j$ of the identity matrix $\bm{I}_n$.
+Let $j$ be the $t_{ip}$\textsuperscript{th} element of the $s_{ip}$\textsuperscript{th} pile, where
+$t_{ip}, s_{ip}$ are associated with $i$. Then, we have the following:
+\begin{align*}
+    \mathcal{P}_{pr}(i,j) & =
+    \begin{cases}
+        1 & j =  t_{ip}r+s_{ip} \\
+        0 & \text{otherwise}
+    \end{cases}                       \\
+    \intertext{where}
+    t_{ip}                & = i \bmod p           \\
+    s_{ip}                & = \floor{\frac{i}{p}}
+\end{align*}
+
+We focus on the condition $j = t_{ip}r+s_{ip}$.
+\begin{align*}
+             & j = s_{ip}r+t_{ip}                                                                                     \\
+    \implies & s_{jr}r+t_{jr} = t_{ip}r+s_{ip}                                                                        \\
+    \implies & s_{jr}n+t_{jr}p = t_{ip}n+s_{ip}p \tag*{$r=\frac{n}{p}$}                                               \\
+    \implies & t_{jr}p + s_{jr} + s_{jr}(n-1) = i + t_{ip}(n-1) \tag*{$i=s_{ip}p+t_{ip}$}                             \\
+    \implies & t_{jr}p + s_{jr} + \floor{\frac{j}{r}}(n-1) = i + t_{ip}(n-1)                                          \\
+    \implies & t_{jr}p + s_{jr} + \floor{\frac{t_{ip}r+s_{ip}}{r}}(n-1) = i + t_{ip}(n-1) \tag*{$j = t_{ip}r+s_{ip}$} \\
+    \implies & t_{jr}p + s_{jr} + t_{ip}(n-1) = i+t_{ip}(n-1) \tag*{$s_{ip}=\floor{\frac{i}{p}},i<pr$}                \\
+    \implies & i = t_{jr}p + s_{jr}
+\end{align*}
+
+This means $\mathcal{P}_{pr}(i,j)=\mathcal{P}_{rp}(j,i)$. Thus, we have $\mathcal{P}_{pr}=\mathcal{P}^T_{rp}$ i.e. $\mathcal{P}^T_{pr}=\mathcal{P}_{rp}$.
+
+\section*{Question 13}
+There are $2$ symmetric permutation matrices for $n>1$, which are $\bm{I}_n$ and $\bm{I}_n(n:-1:1,:)$.
 
 \end{document}
