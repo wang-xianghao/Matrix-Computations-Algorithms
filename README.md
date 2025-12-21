@@ -9,5 +9,5 @@ Algorithms and exercise solutions for *Matrix Computations(4th Edition) by G.H. 
 - TODO
 
 ## Exercises
-- [Exercise 1.2](<code/Exercise 1.2.ipynb>)
+- Exercise 1.2: [code](<code/Exercise 1.2.ipynb>)|[tex](<tex/Exercise 1.2.tex>)
 - TODO
