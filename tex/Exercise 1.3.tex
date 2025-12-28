@@ -1,0 +1,288 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{algorithm, algpseudocodex}
+\usepackage{bm}
+\usepackage{parskip}
+
+\newcommand{\vect}[1]{\textbf{vec}(#1)}
+\newcommand{\reshape}{\textbf{reshape}}
+
+\author{Xianghao Wang}
+\title{Matrix Computations Exercise 1.3}
+\begin{document}
+\maketitle
+
+\section*{P1.3.1}
+
+Suppose $\bm{A}$ is a $q\times r$ block matrix and block
+$\bm{A}_{\alpha\beta}$ has dimension $m_{\alpha} \times m_{\beta}$.
+Let $\bm{B}=\bm{A}^T$.
+
+\begin{align*}
+    (B_{\beta\alpha})_{ji} & = (A^T_{\alpha\beta})_{ji} \\
+                           & = (A_{\alpha\beta})_{ij}
+\end{align*}
+
+\section*{P1.3.2}
+Suppose the Hamiltonian matrix $\bm{M}=\begin{bmatrix}
+        \bm{A} & \bm{G}    \\
+        \bm{F} & -\bm{A}^T
+    \end{bmatrix}$ where $\bm{F},\bm{G}$ are symmetric.
+
+\begin{align*}
+    \bm{N} & = \bm{M}^2                                       \\
+           & =
+    \begin{bmatrix}
+        \bm{A} & \bm{G}    \\
+        \bm{F} & -\bm{A}^T
+    \end{bmatrix}
+    \begin{bmatrix}
+        \bm{A} & \bm{G}    \\
+        \bm{F} & -\bm{A}^T
+    \end{bmatrix}                                        \\
+           & =
+    \begin{bmatrix}
+        \bm{A}^2+\bm{G}\bm{F}       & \bm{A}\bm{G}-\bm{G}\bm{A}^T \\
+        \bm{F}\bm{A}-\bm{A}^T\bm{F} & \bm{F}\bm{G}+(\bm{A}^2)^T
+    \end{bmatrix} \\
+           & =
+    \begin{bmatrix}
+        \bm{A}^2+\bm{G}\bm{F}         & \bm{A}\bm{G}-(\bm{A}\bm{G})^T \\
+        \bm{F}\bm{A}-(\bm{F}\bm{A})^T & (\bm{A}^2+\bm{G}\bm{F})^T
+    \end{bmatrix}
+\end{align*}
+
+Thus, we have the following:
+\begin{align*}
+    \bm{N}   & =
+    \begin{bmatrix}
+        \bm{P}_1            & \bm{P}_2-\bm{P}_2^T \\
+        \bm{P}_3-\bm{P}_3^T & \bm{P}_1^T
+    \end{bmatrix}
+    \intertext{where}
+    \bm{P}_1 & = \bm{A}^2+\bm{G}\bm{F} \\
+    \bm{P}_2 & = \bm{A}\bm{G}          \\
+    \bm{P}_3 & = \bm{F}\bm{A}
+\end{align*}
+
+There are $4$ multiplies and $3$ adds of $\frac{n}{2}\times\frac{n}{2}$ matrices.
+Each matrix multiply invovles $2(\frac{n}{2})^3-(\frac{n}{2})^2$ flops,
+and each matrix add invovles $(\frac{n}{2})^2$ flops. Thus, computing $\bm{N}$
+involves $8(\frac{n}{2})^3-(\frac{n}{2})^2$ flops in total.
+
+
+\section*{P1.3.3}
+
+$(\varepsilon_{2n}A)_{i,j} = A_{2n+1-i,j}$, then we have
+$(\varepsilon_{2n}A\varepsilon_{2n})_{i,j} = A_{2n+1-i,2n+1-j}$.
+We know $\varepsilon_{2n}A\varepsilon_{2n}=A^T$, thus $A_{j,i}=A_{2n+1-i,2n+1-j}$.
+This means $A$ is symmetric about the antidiagonal.
+
+\section*{P1.3.4}
+\textbf{Property 1:} $T$ is a symmetric matrx.
+\begin{align*}
+    T^T & = (PAP^T)^T           \\
+        & =PA^TP^T              \\
+        & = P\begin{bmatrix}
+                 0   & B \\
+                 B^T & 0
+             \end{bmatrix}^TP^T \\
+        & = P\begin{bmatrix}
+                 0       & B^T \\
+                 (B^T)^T & 0
+             \end{bmatrix}P^T   \\
+        & = P\begin{bmatrix}
+                 0 & B^T \\
+                 B & 0
+             \end{bmatrix}P^T   \\
+        & =PAP^T                \\
+        & = T
+\end{align*}
+
+\textbf{Property 2: } The main diagonal of $T$ is all zeros.
+\begin{align*}
+    (PAP^T)_{ii} & = \sum_{p=1}^{2n}\sum_{q=1}^{2n} P_{ip}A_{pq}P_{iq}                         \\
+                 & = \sum_{p=1}^{2n}P_{ip}A_{pp}P_{ip} \tag*{(Each $P$ row has a unique $1$.)} \\
+                 & = 0 \tag*{($A_{pp}=0$)}
+\end{align*}
+
+\textbf{Property 3: }
+
+The permutation matrix $P=\mathcal{P}_{2,n}$ interleaves the first
+$n$ indices with the last $n$ indices. We can view $PA$ as interleaving $A$'s rows and $(PA)P^T$ as interleaving
+$PA$'s columns since $((PA)P^T)^T=P(PA)^T$.
+
+With interleaving, indices $(1,2,3,\dots,n)$ becomes $(1,3,5,\dots,2n-1)$, and
+indices $(n+1,n+2,n+3,\dots,2n)$ becomes $(2,4,6,\dots,2n)$.
+Thus, row/column $i$ of $A$ becomes row/column $2i-1$ of $T$, and
+row/column $n+i$ of $A$ becomes row/column $2i$ of $T$.
+
+Suppose $B$'s main diagonal is vector $d$ and the superdiagonal
+is vector $e$.
+For the top-right block $B$, $A_{i,n+j}$ becomes $T_{2i-1,2j}$.
+For the bottom-left block $B^T$, $A_{n+i,j}$ becomes $T_{2i,2j-1}$.
+
+Since $A_{i,n+i}=d_i$ and $A_{n+i,i}=d_i$, the slots $(2i-1,2i)$ and $(2i,2i-1)$
+hold the main diagonal of $B$.
+
+Since $A_{i,n+i+1}=e_i$ and $A_{n+i+1,i}=e_i$, the slots
+$(2i-1,2i+2)$ and $(2i+2,2i-1)$ hold the superdiagonal of $B$.
+
+\textbf{P.S.} The indices can be discussed case by case, rather than be
+expressed by a single formula via the complex $\bmod$.
+
+\section*{P1.3.5}
+Suppose $m\times m$ matrix $B$ and $n \times n$ matrix $C$ are permutation matrices.
+\begin{align*}
+    B \otimes C & =
+    \begin{bmatrix}
+        B_{11}C & B_{12}C & \dots & B_{1m}C \\
+        \vdots                              \\
+        B_{m1}C & B_{m2}C & \dots & B_{mm}C
+    \end{bmatrix}
+\end{align*}
+
+Since each row of $B$ has a unique $1$,
+each row block
+$\begin{bmatrix}
+        B_{i1}C & \dots & B_{im}
+    \end{bmatrix}$
+has a unique $C$ matrix. Since each row of $C$ has
+a unique $1$, each row of $B\otimes C$ has a unique $1$.
+Thus, $B \otimes C$ is a permutation matrix.
+
+\section*{P1.3.6}
+Pre-multiplication by $P$ permutes the rows, while post-multiplication by $Q^T$ permutes
+the columns.
+\begin{itemize}
+    \item Permuted by $P=\mathcal{P}_{m_1,m_2}$,
+          row ${(p-1)m_2+i}$ of $B\otimes C$ becomes row $(i-1)m_1+p$ of $P(B\otimes C)$,
+          where $1 \le p \le n_1$ and $1 \le i \le n_2$.
+    \item Permuted by $Q=\mathcal{P}_{n_1,n_2}$,
+          column $(q-1)n_2+j$ of $P(B\otimes C)$ becomes column $(j-1)n_1+q$ of $P(B\otimes C)Q^T$,
+          where $1 \le q \le m_1$ and $1 \le j \le m_2$.
+\end{itemize}
+
+Thus, permutated by both $P$ and $Q$, we get
+\begin{align*}
+         & (B\otimes C)_{(p-1)m_2+i,(q-1)n_2+j}  =(P(B\otimes C)Q^T)_{(i-1)m_1+p,(j-1)n_1+q}  \\
+    \iff & B_{p,q}C_{i,j}                        = (P(B\otimes C)Q^T)_{(i-1)m_1+p,(j-1)n_1+q} \\
+    \iff & (C\otimes B)_{(i-1)m_1+p,(j-1)n1+q} =  (P(B\otimes C)Q^T)_{(i-1)m_1+p,(j-1)n_1+q}  \\
+    \iff & C\otimes B = P(B\otimes C)Q^T
+\end{align*}
+
+\section*{P1.3.7}
+\begin{align*}
+    \vect{xy^T} & =
+    \begin{bmatrix}
+        (xy^T)[:,1] \\
+        (xy^T)[:,2] \\
+        \vdots      \\
+        (xy^T)[:,n]
+    \end{bmatrix}              \\
+                & =
+    \begin{bmatrix}
+        y_1x   \\
+        y_2x   \\
+        \vdots \\
+        y_nx
+    \end{bmatrix}              \\
+                & = y \otimes x
+\end{align*}
+
+\section*{P1.3.8}
+
+Let $X=\begin{bmatrix} x_1 & x_2 & \dots & x_p \end{bmatrix} \in \mathbb{R}^{q\times p}$,
+then we have $x=\vect{X}$ and $X_{ij}=x_{j}(i)$.
+\begin{align*}
+    x^T(B\otimes C)x & = \vect{X}^T(B\otimes C)\vect{X}                                                                \\
+                     & = \vect{X}^T\vect{Y} \tag*{($Y=CXB^T$, 1.3.6)}                                                  \\
+                     & = \sum_{a=1}^{p\times q} \vect{X}^T_a \vect{Y}_a                                                \\
+                     & = \sum_{i=1}^p\sum_{j=1}^q \vect{X}^T_{(i-1)q+j} \vect{Y}_{(i-1)q+j}                            \\
+                     & = \sum_{i=1}^p\sum_{j=1}^q x_i(j)Y(j,i)                                                         \\
+                     & = \sum_{i=1}^p\sum_{j=1}^q x_i(j) \sum_{k_1=1}^q\sum_{k_2=1}^p c_{jk_1}x_{k_2}(k_1) b_{ik_2}    \\
+                     & = \sum_{i=1}^p\sum_{k_1=1}^q\sum_{k_2=1}^p  x_{k_2}(k_1) b_{ik_2}  \sum_{j=1}^q x_i(j) c_{jk_1} \\
+                     & =\sum_{i=1}^p\sum_{k_1=1}^q\sum_{k_2=1}^p  x_{k_2}(k_1) b_{ik_2} x_i^TC[:,k_1]                  \\
+                     & = \sum_{i=1}^p\sum_{k_2=1}^p  b_{ik_2} x_i^T  \sum_{k_1=1}^q  x_{k_2}(k_1)C[:,k_1]              \\
+                     & = \sum_{i=1}^p\sum_{k_2=1}^p  b_{ik_2} x_i^T C x_{k_2}                                          \\
+                     & = \sum_{i=1}^p\sum_{j=1}^p  b_{ij} x_i^T C x_{j}
+\end{align*}
+
+\section*{P1.3.9}
+
+Suppose $f_k(x) =((A^{(k)}) \otimes \dots \otimes A^{(1)})x$ for $k=1:r$ and $m_k=n_1\dots n_k$ for $k=1:r$.
+
+\begin{align*}
+    y = f_k(x) & = ((A^{(k)}) \otimes \dots \otimes A^{(1)})x                                               \\
+               & = \vect{((A^{(k-1)}) \otimes \dots \otimes A^{(1)}) \reshape (x,m_{k-1},n_{k})(A^{(k)})^T} \\
+               & = \vect{
+        \begin{bmatrix}
+            f_{k-1}(x_{1:m_{k-1}}) & \dots & f_{k-1}(x_{(n_k-1)m_{k-1}+1:n_km_{k-1}})
+        \end{bmatrix}
+        (A^{(k)})^T
+    }                                                                                                       \\
+               & = \vect{
+        \begin{bmatrix}
+            f_{k-1}(x_{1:m_{k-1}})(A^{(k)})^T & \dots & f_{k-1}(x_{(n_k-1)m_{k-1}+1:n_km_{k-1}})(A^{(k)})^T
+        \end{bmatrix}
+    }
+\end{align*}
+
+Thus, we got the following recurrent relations:
+\begin{align*}
+    f_k(x) & =
+    \begin{cases}
+        \vect{
+        \begin{bmatrix}
+                f_{k-1}(x_{1:m_{k-1}})(A^{(k)})^T & \dots & f_{k-1}(x_{(n_k-1)m_{k-1}+1:n_km_{k-1}})(A^{(k)})^T
+            \end{bmatrix} & k > 1
+        }                                                                                                                                                                                                 \\
+        A^{(1)}x                                                                                                                                                                                    & k=0
+    \end{cases} \\
+    m_k    & = \begin{cases}
+                   m_{k-1}n_k & k > 1 \\
+                   n_k        & k = 1
+               \end{cases}
+\end{align*}
+
+\section*{P1.3.10 (a)}
+\begin{align*}
+      & \sum_{i=1}^{n/2}(x_{2i-1}+y_{2i})(x_{2i}y_{2i-1}) - f(x) - f(y)                                                 \\
+    = & \sum_{i=1}^{n/2}(x_{2i-1}+y_{2i})(x_{2i}y_{2i-1})-\sum_{i=1}^{n/2}x_{2i-i}x_{2i}-\sum_{i=1}^{n/2}y_{2i-1}y_{2i} \\
+    = & \sum_{i=1}^{n/2} (x_{2i-1}y_{2i-1}+x_{2i}y_{2i})                                                                \\
+    = & \sum_{i=1}^n x_iy_i                                                                                             \\
+    = & x^Ty
+\end{align*}
+
+\section*{P1.3.10 (b)}
+Let $a_i^T$ be rows of $A$ and $b_j$ be columns of $B$, such that $1 \le i,j \le n$.
+\begin{align*}
+    C_{ij} & = a_i^Tb_j                                                                    \\
+           & = \sum_{k=1}^{n/2} (A_{i,2k-1}+B_{2k,j})(A_{i,2k}+B_{2k-1,j}) - f(a_i)-f(b_i)
+\end{align*}
+
+Since $C$ has $n^2$ elements and computing each element takes $\frac{n}{2}$ multiplies, thus
+computing $C$ requires $\frac{n^3}{2}$ multiplies.
+
+\section*{P1.3.14}
+Let $n=2^p$. From $W_n$'s recurrent relation, we get the following:
+\begin{align*}
+    W_n & = \sum_{k=1}^{p-1} \left[7^{k-1}\times 18 \times (\frac{n}{2^{k}})^2\right] + 7^{p-1}\times 25 \\
+        & = \frac{18n^2}{7}\sum_{k=1}^{p-1}(\frac{7}{4})^k + 7^{p-1}\times 25                            \\
+        & = \frac{24n^2}{7}((\frac{7}{4})^p-\frac{7}{4}) + 7^{p-1}\times 25                              \\
+        & = \frac{24n^2}{7}((\frac{7}{4})^{\log n}-\frac{7}{4}) + 7^{\log n-1}\times 25                  \\
+        & = \frac{24n^2}{7}(\frac{n^{\log7}}{n^2}-\frac{7}{4}) + \frac{n^{\log 7}}{7}\times 25           \\
+        & = 7n^{\log 7} - 6n^2
+\end{align*}
+
+We conclude any $c_{\epsilon}>7$ ensures $W_n \le c_{\epsilon}n^{w+\epsilon}$ for every $\epsilon>0$, as shown below.
+\begin{align*}
+    \frac{W_n}{n^{w+\epsilon}} & = \frac{7n^{\log 7} - 6n^2}{n^{\log7+\epsilon}} \\
+                               & =7n^{-\epsilon}-6n^{2-\log7-\epsilon}           \\
+                               & \le 7n^{-\epsilon}                              \\
+                               & \le 7
+\end{align*}
+
+
+\end{document}
