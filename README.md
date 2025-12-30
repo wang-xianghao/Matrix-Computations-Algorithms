@@ -12,4 +12,5 @@ Algorithms and exercise solutions for *Matrix Computations(4th Edition) by G.H. 
 
 ## Exercises
 - Exercise 1.2: [code](<code/Exercise 1.2.ipynb>)|[tex](<tex/Exercise 1.2.tex>)
+- Exercise 1.3: [code](<code/Exercise 1.3.ipynb>)|[tex](<tex/Exercise 1.3.tex>)
 - TODO
