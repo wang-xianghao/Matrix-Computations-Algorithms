@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{algorithm, algpseudocodex}
+\usepackage{bm}
+\usepackage{parskip}
+
+\author{Xianghao Wang}
+\title{Matrix Computations Exercise 1.5}
+\begin{document}
+\maketitle
+
+\section*{Question 1}
+For simplicity, we ignore the final cleanup pass.
+\begin{algorithm}[H]
+    \begin{algorithmic}[1]
+        \Ensure $e(1:n-1),d(1:n),f(2:n)$ stores the matrix $A$'s
+        subdiagonal, diagonal, and super diagonal respectively, while
+        other elements in $e,d,f$ are zeros. $x,y \in \mathbb{R}^n$.
+        \Require $y=y+Ax$.
+
+        \State $first=1$
+        \While{$first \le n$}
+        \State $last = min(last + v_L -1, n)$
+        \State $r_d \gets d(first:last)$
+        \State $r_e \gets e(first-1:last-1)$
+        \State $r_f \gets f(first+1:last+1)$
+        \State $r_x \gets x(first:last)$
+        \State $r_y \gets y(first:last)$
+        \State $r_y = r_x .* r_d + r_x .* r_e + r_x .* r_f + r_y$
+        \State $y(first:last) \gets r_y$
+        \State $first=last+1$
+        \EndWhile
+    \end{algorithmic}
+\end{algorithm}
+
+\section*{Question 2}
+\begin{algorithm}[H]
+    \begin{algorithmic}[1]
+        \Ensure $A,B,C \in \mathbb{R}^{n\times n}$, and $B$ is symmetric.
+        \Require $C=C+A^TBA$.
+
+        \For{$i=1:n$}
+        \For{$j=1:n$}
+        \For{$k=1:v_L:n$}
+        \State $r_a \gets A(i,k:k+v_L-1)$
+        \State $r_b \gets B(k:k+v_L-1,j)$
+        \State $r_d = r_a .* r_b $
+        \State $U_{ij}=reduce(r_u)$
+        \EndFor
+        \EndFor
+        \EndFor
+        \For{$j=1:n$}
+        \For{$k=1:n$}
+        \For{$i=1:v_L:n$}
+        \State $r_c \gets C(i:i+v_L-1,j)$
+        \State $r_u \gets U(i:i+v_L-1,k)$
+        \State $r_c = r_c + A_{kj}r_u$
+        \EndFor
+        \EndFor
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+\end{document}
