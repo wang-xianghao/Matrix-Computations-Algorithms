@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{algorithm, algpseudocodex}
+\usepackage{bm}
+\usepackage{parskip}
+\usepackage{physics}
+
+\author{Xianghao Wang}
+\title{Matrix Computations Exercise 2.1}
+\begin{document}
+\maketitle
+
+\newcommand{\floor}[1]{\lfloor#1\rfloor}
+
+\section*{P2.1.1}
+TODO
+% We select $p$ linearly independent columns from $A$ to form $X\in\mathbb{R}^{m\times p}$,
+% so $rank(X)=p$.
+
+% We need construct a matrix $Y \in\mathbb{R}^{n\times p}$ such that
+% $A=XY^T$. We can view each column of $Y^T$ selects a column of $X$
+
+\section*{P2.1.2a}
+\begin{align*}
+      & \dv{\alpha}\left[A(\alpha)B(\alpha)\right]                                   \\
+    = & \dv{\alpha} (A(i,:)B(:,j))                                                   \\
+    = & \dv{\alpha} (\sum_{k=1}^ra_{ik}b_{kj})                                       \\
+    = & \left(\sum_{k=1}^r \dv{\alpha}a_{ik}b_{kj} \right)                           \\
+    = & \left(\sum_{k=1}^r\dv{a_{ik}}{\alpha}b_{kj}+a_{ik}\dv{b_{kj}}{\alpha}\right) \\
+    = & \left(\sum_{k=1}^r\dv{a_{ik}}{\alpha}b_{kj}\right)+
+    \left(\sum_{k=1}^ra_{ik}\dv{b_{kj}}{\alpha}\right)                               \\
+    = & \left(\dv{A(i,:)}{\alpha}B(:,j)\right)+
+    \left(A(i,:)\dv{B(:,j)}{\alpha}\right)                                           \\
+    = & \dv{A(\alpha)}{\alpha}B(\alpha)+A(\alpha)\dv{B(\alpha)}{\alpha}
+\end{align*}
+
+\section*{P2.1.2b}
+Let $C=A(\alpha)^{-1}$.
+\begin{align*}
+      & \dv{\alpha}\left[A(\alpha)^{-1}\right] \\
+    = & C'                                     \\
+    = & (CAC)'                                 \\
+    = & C'AC+C(AC)'                            \\
+    = & C'+C(A'C+AC')                          \\
+    = & C'+CA'C+CAC'                           \\
+    = & 2C'+CA'C
+\end{align*}
+Thus, we have $C'=2C'+CA'C \iff C'=-CA'C$.
+
+\end{document}
