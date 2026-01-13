@@ -1,0 +1,353 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{algorithm, algpseudocodex}
+\usepackage{bm}
+\usepackage{parskip}
+\usepackage{physics}
+
+\author{Xianghao Wang}
+\title{Matrix Computations Exercise 2.2}
+\begin{document}
+\maketitle
+
+
+
+\section*{P2.2.1}
+Let $a=\max_{1\le k\le n} |x_k|$ and there are $m$ components equal to $a$.
+\begin{align*}
+      & \lim_{p\to\infty} \norm{x}_p                                                                                       \\
+    = & \lim_{p\to\infty} (\sum_{k=1}^n x_k^p)^{\frac{1}{p}}                                                               \\
+    = & \lim_{p\to\infty} (a^p \sum_{k=1,x_k\neq a}^n (\frac{x_k}{a})^p+ma^p)^\frac{1}{p}                                  \\
+    = & \left(\lim_{p\to\infty} a^p \sum_{k=1,x_k\neq a}^n (\frac{x_k}{a})^p + \lim_{p\to\infty}m x_a^p\right)^\frac{1}{p} \\
+    = & \left(\lim_{p\to\infty} m a^p\right)^\frac{1}{p}    \tag*{($\frac{x_k}{a} < 1$)}                                   \\
+    = & \lim_{p\to\infty}  \left(m a^p\right)^\frac{1}{p}                                                                  \\
+    = & \lim_{p\to\infty} m^\frac{1}{p} a                                                                                  \\
+    = & a                                                                                                                  \\
+    = & \max_{1\le k\le n} |x_k|
+\end{align*}
+
+\section*{P2.2.2}
+Let $a=1$ and $b=-\frac{x^Ty}{y^Ty}$.
+\begin{align*}
+        & (x+by)^T(x+by)                                            \\
+    =   & x^Tx + 2bx^Ty+ b^2y^Ty                                    \\
+    =   & x^Tx -2\frac{(x^Ty)^2}{y^Ty} + (-\frac{x^Ty}{y^Ty})^2y^Ty \\
+    =   & x^Tx -\frac{(x^Ty)^2}{y^Ty}                               \\
+    \ge & 0
+\end{align*}
+Then, we have
+\begin{align*}
+             & x^Tx y^Ty \ge (x^Ty)^2            \\
+    \implies & \norm{x}^2\norm{y}^2 \ge (x^Ty)^2 \\
+    \implies & \norm{x}\norm{y} \ge |x^T y|
+\end{align*}
+
+\section*{P2.2.3a}
+\textbf{Condition 1}
+\begin{align*}
+    \norm{x}_1 = \sum_{k=1}^n |x_k| \ge 0
+\end{align*}
+Since $|x_k| \ge 0$, we get $\norm{x}_1=0$ if and only if $x_1=x_2=\dots=x_n=0$ i.e. $x=0_n$.
+
+\textbf{Condition 2}
+\begin{align*}
+    \norm{x}_1 + \norm{y}_1 =\sum_{k=1}^n |x_k|+\sum_{k=1}^n |y_k| = \sum_{k=1}^n (|x_k|+|y_k|) \ge \sum_{k=1}^n |x_k+y_k| =\norm{x+y}_1
+\end{align*}
+
+\textbf{Condition 3}
+\begin{align*}
+    \norm{\alpha x}_1 = \sum_{k=1}^n |\alpha x_k| = \sum_{k=1}^n |\alpha||x_k| = |\alpha|\sum_{k=1}^n |x_k| = |\alpha|\norm{x}_1
+\end{align*}
+
+\section*{P2.2.3b}
+\textbf{Condition 1}
+\begin{align*}
+    \norm{x}_2 = \sqrt{\sum_{k=1}^n x_k^2} \ge 0
+\end{align*}
+Since $x_k^2 \ge 0$, then $\norm{x}_2 =0$ if and only if $x=0_n$.
+
+\textbf{Condition 2}
+\begin{align*}
+    \norm{x+y}_2^2
+     & = (x+y)^T(x+y)                                                              \\
+     & = \norm{x}_2^2+2x^Ty+\norm{y}^2_2                                           \\
+     & \le \norm{x}_2^2+2|x^Ty|+\norm{y}^2_2                                       \\
+     & \le \norm{x}_2^2+2\norm{x}_2\norm{y}_2+\norm{y}^2_2 \tag*{(Cauchy-Schwarz)} \\
+     & = (\norm{x}_2+\norm{y}_2)^2
+\end{align*}
+
+Since both $\norm{x+y}_2^2$ and $\norm{x}_2+\norm{y}_2$ are non-negative, we have
+\[
+    \norm{x+y}_2 \le \norm{x}_2+\norm{y}_2
+\]
+
+\textbf{Condition 3}
+\begin{align*}
+    \norm{\alpha x}_2 = \sqrt{(\alpha x)^T(\alpha x)}=\sqrt{\alpha^2 x^Tx} =|\alpha|\sqrt{x^Tx}=|\alpha|\norm{x}_2
+\end{align*}
+
+\section*{P2.2.3c}
+\textbf{Condition 1}
+\begin{align*}
+    \norm{x}_\infty = \max_{1\le k\le n} |x_k| \ge 0
+\end{align*}
+
+$\norm{x}_\infty=0$ if and only if $x=0$. If some components in $x$ are non-zero,
+thoese components' absolute values must be greater than or equal to $0$, leading to non-zero $\norm{x}_\infty$.
+
+\textbf{Condition 2}
+
+\begin{align*}
+        & \norm{x+y}_\infty                                             \\
+    =   & \max_{1\le k\le n}|x_k+y_k|                                   \\
+    =   & |x_p+y_p|                \tag*{($k=p$ maximizes $|x_k+y_k|$)} \\
+    \le & |x_p|+|y_p|                                                   \\
+    \le & \norm{x}_\infty+\norm{y}_\infty
+\end{align*}
+
+\textbf{Condition 3}
+\begin{align*}
+    \norm{\alpha x}_\infty =\max_{1\le k\le n}|\alpha x_k| =\max_{1\le k\le n}|\alpha||x_k|=|\alpha|\max_{1\le k\le n}|x_k|
+\end{align*}
+
+\section*{P2.2.4a}
+
+\textbf{Left}
+\begin{align*}
+    \norm{x}_1^2
+        & = (\sum_{k=1}^n |x_k|)^2                                      \\
+    =   & \sum_{k=1}^n |x_k|^2  + \sum_{i=1}^n\sum_{j\neq i}^n |x_ix_j| \\
+    \ge & \sum_{k=1}^n |x_k|^2                                          \\
+    =   & \norm{x}_2^2
+\end{align*}
+Since $\norm{x}_1,\norm{x}_2 \ge 0$, we have $\norm{x}_1 \ge \norm{x}_2$.
+The equality is achieved when ${\sum_{i=1}^n\sum_{j\neq i}^n |x_ix_j|=0}$,
+implied by that only $1$ component of $x$ can be non-zero.
+
+\textbf{Right}
+
+Let $n\ge 2$. The case $n=1$ can be proven trivially.
+\begin{align*}
+    (\norm{x}_1)^2 & = (\sum_{k=1}^n |x_k|)^2                                                                                    \\
+                   & =\sum_{i=1}^n\sum_{j=1}^n |x_ix_j|                                                                          \\
+                   & \le \sum_{i=1}^n\sum_{j=1}^n \frac{|x_i|^2+|x_j|^2}{2}  \tag*{(AM-GM, equality holds when $|x_i|-|x_j|=0$)} \\
+                   & = \frac{1}{2}\sum_{i=1}^n\left[n|x_i|^2+\sum_{j=1}^n|x_j|^2 \right]                                         \\
+                   & =\frac{1}{2}\left[n\sum_{i=1}^n|x_i|^2+\sum_{i=1}^n\sum_{j=1}^n|x_j|^2\right]                               \\
+                   & =\frac{1}{2}\left[n\sum_{i=1}^n|x_i|^2+n\sum_{j=1}^n|j_i|^2\right]                                          \\
+                   & =n\sum_{i=1}^n|x_i|^2                                                                                       \\
+                   & = (\sqrt{n}\norm{x}_2)^2
+\end{align*}
+
+Thus, we have $\norm{x}_1 \le \sqrt{n}\norm{x}_2$. To achieve the equality,
+we need ${x_1=x_2=\dots=x_n}$.
+
+\section*{P2.2.4b}
+Suppose $\norm{x}_\infty=x_p$, such that $x_p \ge x_i$ for $1 \le i \le n$.
+
+\textbf{Left}
+\begin{align*}
+    \norm{x}_2 & = \sqrt{\sum_{k=1}^n|x_k|^2} \\
+               & \ge \sqrt{|x_p|^2}           \\
+               & =|x_p|                       \\
+               & = \norm{x}_\infty
+\end{align*}
+
+The equality holds when there is at most $1$ non-zero component in $x$.
+
+\textbf{Right}
+\begin{align*}
+    \norm{x}_2 & =\sqrt{\sum_{k=1}^n|x_k|^2}     \\
+               & \le \sqrt{\sum_{k=1}^n |x_p|^2} \\
+               & = \sqrt{n|x_p|^2}               \\
+               & = \sqrt{n}|x_p|                 \\
+               & = \sqrt{n}\norm{x}_\infty
+\end{align*}
+
+The equality holds when $x_1=x_2=\dots=x_n$.
+
+\section*{P2.2.4c}
+
+The equality holds when there is only $1$ non-zero component in $x$.
+
+\textbf{Left}
+
+\begin{align*}
+    \norm{x}_1 & = \sum_{k=1}^n |x_k| \\
+               & \ge |x_p|            \\
+               & = \norm{x}_\infty
+\end{align*}
+
+The equality is achieved when $x$ has at most one non-zero component.
+
+\text{Right}
+
+\begin{align*}
+    \norm{x}_1 & = \sum_{k=1}^n |x_k|   \\
+               & \le \sum_{k=1}^n |x_p| \\
+               & =n \norm{x}_\infty
+\end{align*}
+
+The equality holds when $x_1=x_2=\dots=x_n$.
+
+\section*{P2.2.5}
+With $x^{(i)}\to x$, we have
+\begin{align*}
+             & \lim_{k\to\infty}\norm{x^{(k)}-x}=0               \\
+    \implies & \lim_{k\to\infty}\sum_{i=1}^n |x^{(k)}_i-x_i| = 0 \\
+    \implies & \sum_{i=1}^n \lim_{k\to\infty}|x^{(k)}_i-x_i| = 0
+\end{align*}
+
+Since $\lim_{k\to\infty}|x^{(k)}_i-x_i|\ge 0$, we have $\lim_{k\to\infty}|x^{(k)}_i-x_i|=0$ for $1\le i \le n$.
+Then, $x^{(k)}_i \to x_i$ for $1\le i \le n$.
+
+Now, we need to prove the reverse. We have $x^{(k)}_i \to x_i$ for $1\le i \le n$,
+then
+\begin{align*}
+    \lim_{k\to\infty}\norm{x^{(k)}-x}
+     & = \lim_{k\to\infty}\sum_{i=1}^n |x^{(k)}_i-x_i| \\
+     & =\sum_{i=1}^n \lim_{k\to\infty}|x^{(k)}_i-x_i|  \\
+     & = \sum_{i=1}^n 0                                \\
+     & = 0
+\end{align*}
+Thus, we get $x^{(i)}\to x$.
+
+\section*{P2.2.6}
+
+\begin{align*}
+    \norm{x-y}^2
+     & = (\norm{x-y}+\norm{y}-\norm{y})^2 \\
+     & \ge (\norm{x-y+y}-\norm{y})^2      \\
+     & = (\norm{x}-\norm{y})^2
+\end{align*}
+
+Thus, we have $\norm{x-y} \ge |\norm{x}-\norm{y}|$.
+
+\section*{P2.2.7}
+\textbf{Condition 1}
+\begin{align*}
+    \norm{x}_A = \norm{Ax} \ge 0
+\end{align*}
+
+If $x=0$,we have $\norm{A\cdot 0}=\norm{0}=0$.
+
+Since $rank(A)=n$, we have $dim(null(A))=0$. Thus, $Ax=0$ if and only if $x=0$.
+$\norm{Ax}=0$ if and only if $Ax=0$ i.e. $x=0$. So $\norm{Ax=0}$ implies $x=0$.
+
+\textbf{Condition 2}
+\begin{align*}
+    \norm{A(x+y)} = \norm{Ax+Ay} \le \norm{Ax}+\norm{Ay} \iff \norm{x+y}_A \le \norm{x}_A+\norm{y}_A
+\end{align*}
+
+\textbf{Condition 3}
+\begin{align*}
+    \norm{A(\alpha x)} = \norm{\alpha Ax} =|\alpha| \norm{Ax} \iff \norm{\alpha x}_A = |\alpha| \norm{x}_A
+\end{align*}
+
+\section*{P2.2.8}
+Since $\psi \ge 0$, minimizing $\psi$ is equivalent to minimizing $\psi^2$.
+
+\begin{align*}
+    \pdv{\alpha}\psi^2
+     & = \pdv{\alpha} (x-\alpha y)^T(x-\alpha y)                 \\
+     & = \pdv{\alpha} \left[y^Ty\alpha^2-2x^Ty\alpha+x^Tx\right] \\
+     & =2y^Ty\alpha-2x^Ty
+\end{align*}
+
+Since $\psi^2$ is quadratic about $\alpha$, minimized $\psi^2$ is achieved when
+\begin{align*}
+         & \pdv{\alpha}\psi^2 = 0   \\
+    \iff & 2y^Ty\alpha-2x^Ty=0      \\
+    \iff & \alpha=\frac{x^Ty}{y^Ty}
+\end{align*}
+
+\section*{P2.2.9}
+Since the equality holds when $v=0$, we suppose $v$ is non-zero. We want to prove
+\begin{align*}
+         & {\norm{v}_1\norm{v}_\infty}
+    \le \frac{1+\sqrt{n}}{2}\norm{v}_2^2                  \\
+    \iff & \frac{\norm{v}_1\norm{v}_\infty}{\norm{v}_2^2}
+    \le \frac{1+\sqrt{n}}{2}
+\end{align*}
+
+Multiplying $v$ by a scalar does not change the ratio, and
+the order of components and their signs do not affect the norms.
+Therefore, without loss of generality, we suppose $v_1=1$ and $v_2,v_3,\dots,v_n \le 1$.
+
+\begin{align*}
+         & \frac{\norm{v}_1\norm{v}_\infty}{\norm{v}_2^2}
+    \le \frac{1+\sqrt{n}}{2}                                                        \\
+    \iff & \frac{1+\sum_{k=2}^n v_k}{1+\sum_{k=2}^n v_k^2} \le \frac{1+\sqrt{n}}{2}
+\end{align*}
+
+Let $z=\frac{x}{y}$ be the right-hande side. We need to find the maximum value of $z$, which is its critical point.
+
+\begin{align*}
+         & \dv{z}{v_k}  =\frac{y-2v_kx}{xy} = 0 \\
+    \iff & v_k =\frac{y}{2x}
+\end{align*}
+
+The critical point is achieved when $v_k=\frac{y}{2x}$.
+The optimal $v_k$ keeps constant regardless of $k$.
+We can simply suppose $v=\begin{bmatrix}
+        1 & t & t & \dots & t
+    \end{bmatrix}$.
+
+Let $m=n-1$, we have
+\begin{align*}
+    z = \frac{x}{y} =\frac{1+mt}{1+mt^2}
+\end{align*}
+
+To get the maximum value of $z$, we have
+\begin{align*}
+         & \dv{z}{t} = \frac{-m^2t^2-2mt+m}{xy} = 0                       \\
+    \iff & m^2t^2+2mt-m=0                                                 \\
+    \iff & t = \frac{-1+\sqrt{m+1}}{m} \tag*{(Discard the negative root)} \\
+    \iff & t = \frac{\sqrt{n}-1}{n-1}
+\end{align*}
+
+Then, we substitute $t$ into $z$ to maximize it.
+\begin{align*}
+    z & = \frac{1+(n-1)t}{1+(n-1)t^2}                      \\
+      & = \frac{\sqrt{n}}{1+\frac{(\sqrt{n}-1)^2}{n-1}}    \\
+      & = \frac{\sqrt{n}}{1+\frac{\sqrt{n}-1}{\sqrt{n}+1}} \\
+      & = \frac{\sqrt{n}(\sqrt{n}+1)}{2\sqrt{n}}           \\
+      & = \frac{\sqrt{n}+1}{2}
+\end{align*}
+
+Since the maximum value of $z$ is $\frac{\sqrt{n}+1}{2}$,
+we get $z \le \frac{\sqrt{n}+1}{2}$.
+
+\section*{P2.2.10a}
+\begin{align*}
+             & (x-y)^T(x-y) = \norm{x}_2^2+\norm{y}_2^2-2\norm{x}_2\norm{y}_2\cos\theta \tag*{(Law of cosines)} \\
+    \iff     & \norm{x}_2^2+\norm{y}_2^2-2x^Ty =\norm{x}_2^2+\norm{y}_2^2-2\norm{x}_2\norm{y}_2\cos\theta       \\
+    \iff     & x^Ty = \norm{x}_2\norm{y}_2\cos\theta                                                            \\
+    \implies & |x^Ty| = \norm{x}_2\norm{y}_2|\cos\theta|
+\end{align*}
+
+\section*{P2.2.10b}
+Since each side is positive, we make each side squared.
+\begin{align*}
+         & LHS^2 = RHS^2                                                                          \\
+    \iff & \norm{x\times y}_2^2 = \norm{x}_2^2\norm{y}_2^2\sin^2\theta                            \\
+    \iff & \norm{x\times y}_2^2 = \norm{x}_2^2\norm{y}_2^2(1-\cos^2\theta)                        \\
+    \iff & \norm{x\times y}_2^2 = \norm{x}_2^2\norm{y}_2^2 - \norm{x}_2^2\norm{y}_2^2\cos^2\theta \\
+    \iff & \norm{x\times y}_2^2 = \norm{x}_2^2\norm{y}_2^2 - (x^Ty)^2
+\end{align*}
+
+The last step's formula is the Lagrange's identity. Q.E.D.
+
+\section*{P2.2.11}
+\begin{align*}
+    \norm{x\otimes y}_p
+     & = \left(\sum_{i=1}^{n^2}(x\otimes y)_i^p\right)^\frac{1}{p}   \\
+     & = \left(\sum_{i=1}^n\sum_{j=1}^n(x_iy_j)^p\right)^\frac{1}{p} \\
+     & = \left(\sum_{i=1}^nx_i^p\sum_{j=1}^ny_j^p\right)^\frac{1}{p} \\
+     & = \left(\sum_{i=1}^nx_i^p\norm{y}_p^p\right)^\frac{1}{p}      \\
+     & = \left(\norm{y}_p^p\sum_{i=1}^nx_i^p\right)^\frac{1}{p}      \\
+     & =\left(\norm{y}_p^p\norm{x}_p^p\right)^\frac{1}{p}            \\
+     & = \norm{x}_p\norm{y}_p
+\end{align*}
+
+\end{document}
