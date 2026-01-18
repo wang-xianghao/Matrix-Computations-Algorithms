@@ -16,3 +16,5 @@ Algorithms and exercise solutions for *Matrix Computations(4th Edition) by G.H. 
 - Exercise 1.5: [tex](<tex/Exercise 1.5.tex>)
 - Exercise 1.6: too difficult for me, skip for now.
 - Exercise 2.2: [tex](<tex/Exercise 2.2.tex>)
+- Exercise 2.3: [tex](<tex/Exercise 2.3.tex>)
+  - Missing P2.3.4 and P2.3.6.
