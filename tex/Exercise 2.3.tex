@@ -1,0 +1,304 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{algorithm, algpseudocodex}
+\usepackage{bm}
+\usepackage{parskip}
+\usepackage{physics}
+
+\author{Xianghao Wang}
+\title{Matrix Computations Exercise 2.3}
+\begin{document}
+\maketitle
+
+\section*{P2.3.1}
+\begin{align*}
+    \norm{AB}_p
+     & = \sup_{\norm{x}_p=1} \norm{ABx}_p                                                                                 \\
+     & = \sup_{\norm{x}_p=1} \frac{\norm{ABx}_p}{\norm{Bx}_p} \norm{Bx}_p                                                 \\
+     & = \sup_{\norm{x}_p=1} \norm{A\frac{Bx}{\norm{Bx}_p}}_p \norm{Bx}_p \tag*{($\norm{\alpha x}_p=|\alpha|\norm{x}_p$)} \\
+     & = \sup_{\norm{x}_p=1} \norm{Ay}_p \norm{Bx}_p \tag*{($y=\frac{Bx}{\norm{Bx}_p},\norm{y}_p=1$)}                     \\
+     & \le \left[\sup_{\norm{y}_p=1} \norm{Ay}_p \right] \left[ \sup_{\norm{x}_p=1}\norm{Bx}_p\right]                     \\
+     & = \norm{A}_p\norm{B}_p
+\end{align*}
+
+\section*{P2.3.2}
+Suppose $B=A(p:q,r:s)$ and $A\in\mathbb{R}^{m\times n}$.
+\begin{align*}
+    \norm{A}_p
+     & =\sup_{\norm{x}_p=1} \norm{Ax}_p                                                                                                      \\
+     & \ge \sup_{\norm{x}_p=1 \land x(1:r-1)=0 \land x(s+1:n)=0 } \norm{Ax}_p                                                                \\
+     & = \sup_{\norm{x}_p=1 \land x(1:r-1)=0 \land x(s+1:n)=0 } \left[\sum_{i=1}^m |A(i,:)x|^p \right]^\frac{1}{p}                           \\
+     & \ge \sup_{\norm{x}_p=1 \land x(1:r-1)=0 \land x(s+1:n)=0 } \left[\sum_{i=p}^q |A(i,:)x|^p \right]^\frac{1}{p}                         \\
+     & = \sup_{\norm{x}_p=1 \land x(1:r-1)=0 \land x(s+1:n)=0 } \left[\sum_{i=p}^q \left|\sum_{j=1}^n A_{ij}x_j\right|^p \right]^\frac{1}{p} \\
+     & = \sup_{\norm{x}_p=1 \land x(1:r-1)=0 \land x(s+1:n)=0 } \left[\sum_{i=p}^q \left|\sum_{j=r}^s A_{ij}x_j\right|^p \right]^\frac{1}{p} \\
+     & = \sup_{\norm{y}_p=1} \left[\sum_{i=1}^{q-p+1} \left|\sum_{j=1}^{s-r+1} B_{ij}y_j\right|^p \right]^\frac{1}{p}                        \\
+     & = \norm{B}_p
+\end{align*}
+
+\section*{P2.3.3}
+Let $\norm{x}_p=1$.
+\begin{align*}
+    \norm{Dx}_p
+     & =  \left(\sum_{i=1}^k|\mu_ix_i|^p\right)^\frac{1}{p}                                   \\
+     & \le  \left(\sum_{i=1}^k|\mu_*x_i|^p\right)^\frac{1}{p}  \tag*{($|\mu_*|=\max|\mu_i|$)} \\
+     & = |\mu_*|  \left(\sum_{i=1}^k|x_i|^p\right)^\frac{1}{p}                                \\
+     & \le |\mu_*|  \left(\sum_{i=1}^n|x_i|^p\right)^\frac{1}{p}                              \\
+     & = |\mu_*|  \norm{x}_p                                                                  \\
+     & = |\mu_*|
+\end{align*}
+
+Let $\mu_a = \mu_*$, we construct a vector $x'$ and $x_a=1$ is its only non-zero component.
+Then, we have $\norm{Dx}_p=|\mu_*|$
+Since $\norm{Dx}_p \le |\mu_*|$ and $\norm{Dx}_p = |\mu_*|$ when $x=x'$,
+we conclude ${\sup_{\norm{x}_p=1} \norm{Dx}_p = |\mu_*|}$. Thus, $\norm{D}_p=\max|\mu_i|$.
+
+\section*{P2.3.4a}
+\textbf{Left}
+\begin{align*}
+    \norm{A}_2^2
+     & = \sup_{\norm{x}_2=1}
+    \norm{Ax}_2^2                                                                    \\
+     & =  \sup_{\norm{x}_2=1}
+    \sum_{i=1}^m\left|A(i,:)x\right|^2                                               \\
+     & \le  \sup_{\norm{x}_2=1}
+    \sum_{i=1}^m \norm{A(i,:)^T}_2^2 \norm{x}_2^2 \tag*{(Cauchy-Schwarz inequality)} \\
+     & = \sup_{\norm{x}_2=1}
+    \norm{x}_2^2 \sum_{i=1}^m \norm{A(i,:)^T}_2^2                                    \\
+     & = \sum_{i=1}^m \norm{A(i,:)^T}_2^2                                            \\
+     & =\sum_{i=1}^m \sum_{j=1}^n A_{ij}^2                                           \\
+     & = \norm{A}_F
+\end{align*}
+Thus, we have $\norm{A}_2 \le \norm{A}_F$.
+
+\textbf{Right}
+\section*{P2.3.5a}
+\textbf{Step 1} Show $LHS \le RHS$.
+\begin{align*}
+    \norm{A}_1
+     & = \sup_{\norm{x}=1} \norm{Ax}_1                                        \\
+     & = \sup_{\norm{x}=1}
+    \sum_{i=1}^m\left|\sum_{j=1}^n A_{ij}x_j\right|                           \\
+     & \le \sup_{\norm{x}=1}
+    \sum_{i=1}^m\sum_{j=1}^n |A_{ij}||x_j|                                    \\
+     & = \sup_{\norm{x}=1}
+    \sum_{j=1}^n |x_j|\sum_{i=1}^m|A_{ij}|                                    \\
+     & = \sup_{\norm{x}=1}
+    \sum_{j=1}^n |x_j|C \tag*{($C=\max_{1\le j\le n} \sum_{i=1}^m |A_{ij}|$)} \\
+     & = \sup_{\norm{x}=1} C  \sum_{j=1}^n |x_j|                              \\
+     & = C                                                                    \\
+     & = \max_{1\le j\le n} \sum_{i=1}^m |A_{ij}|
+\end{align*}
+
+\textbf{Step 2} Show $LHS\ge RHS$.
+
+Let $x'=e_p$ where $j=p$ maximizes $\sum_{i=1}^m |A_{ij}|$.
+
+\begin{align*}
+    \norm{A}_1
+     & = \sup_{\norm{x}_1=1}
+    \sum_{i=1}^m\left|\sum_{j=1}^n A_{ij}x_j\right|           \\
+     & \ge  \sum_{i=1}^m\left|\sum_{j=1}^n A_{ij}x'_j\right|  \\
+     & = \sum_{i=1}^m\left|A_{ip}\right|                      \\
+     & = \max_{1 \le j \le n} \sum_{i=1}^m\left|A_{ij}\right|
+\end{align*}
+
+\section*{P2.3.5b}
+\textbf{Step 1} Show $LHS \le RHS$.
+\begin{align*}
+    \norm{A}_\infty
+     & = \sup_{\norm{x}_\infty=1}
+    \norm{Ax}_\infty                                   \\
+     & = \sup_{\norm{x}_\infty=1}
+    \max_{1 \le i \le m} |A_i^Tx|                      \\
+     & = \sup_{\norm{x}_\infty=1}
+    \max_{1 \le i \le m}
+    \left|\sum_{j=1}^nA_{jj}x_j\right|                 \\
+     & \le \sup_{\norm{x}_\infty=1}
+    \max_{1 \le i \le m}
+    \sum_{j=1}^n |A_{ij}||x_j|                         \\
+     & \le \max_{1 \le i \le m}  \sum_{j=1}^n |A_{ij}|
+\end{align*}
+
+\textbf{Step 2} Show $LHS \ge RHS$.
+
+We construct $x'=\begin{bmatrix}
+        1 & 1 & \dots & 1
+    \end{bmatrix} \in \mathbb{R}^n$. We see $\norm{x'}_\infty=1$.
+\begin{align*}
+    \norm{A}_\infty
+     & = \sup_{\norm{x}_\infty=1}
+    \norm{Ax}_\infty              \\
+     & \ge \norm{Ax'}_\infty      \\
+     & = \norm{
+        \begin{bmatrix}
+            \sum_{j=1}^n |A_{1j}x_j| \\
+            \sum_{j=1}^n |A_{2j}x_j| \\
+            \vdots                   \\
+            \sum_{j=1}^n |A_{mj}x_j|
+        \end{bmatrix}
+    }_\infty                      \\
+     & = \norm{
+        \begin{bmatrix}
+            \sum_{j=1}^n |A_{1j}| \\
+            \sum_{j=1}^n |A_{2j}| \\
+            \vdots                \\
+            \sum_{j=1}^n |A_{mj}|
+        \end{bmatrix}
+    }_\infty                      \\
+     & = \max_{1 \le i \le m}
+    \sum_{j=1}^n |A_{ij}|
+\end{align*}
+
+\section*{P2.3.6}
+TODO
+
+\section*{P2.3.7}
+Let $E_i^T \in \mathbb{R}^{1\times n}$ be row $i$ of $E$.
+\begin{align*}
+      & \norm{E(I-\frac{ss^T}{s^Ts})}_F^2                                                      \\
+    = & \norm{E-\frac{Ess^T}{s^Ts}}_F^2                                                        \\
+    = & \sum_{i=1}^n (E_i^T-\frac{E_i^Tss^T}{s^Ts})(E_i^T-\frac{E_i^Tss^T}{s^Ts})^T            \\
+    = & \sum_{i=1}^n (E_i^T-\frac{E_i^Tss^T}{s^Ts})(E_i-\frac{ss^TE_i}{s^Ts})                  \\
+    = & \sum_{i=1}^n (E_i^TE_i -2 \frac{E_i^Tss^TE_i}{s^Ts}+\frac{E_i^Tss^Tss^TE_i}{(s^Ts)^2}) \\
+    = & \sum_{i=1}^n (E_i^TE_i -2 \frac{E_i^Tss^TE_i}{s^Ts}+\frac{E_i^Tss^TE_i}{s^Ts})         \\
+    = & \sum_{i=1}^n (E_i^TE_i -\frac{E_i^Tss^TE_i}{s^Ts})                                     \\
+    = & \sum_{i=1}^n E_i^TE_i - \frac{1}{s^Ts}\sum_{i=1}^n {E_i^Tss^TE_i}                      \\
+    = & \norm{E}_F^2 - \frac{1}{s^Ts}\norm{Es}_2^2
+\end{align*}
+
+\section*{P2.3.8a}
+\textbf{Show} $\norm{E}_F = \norm{u}_2\norm{v}_2$.
+\begin{align*}
+    \norm{E}_F^2
+     & = \sum_{i=1}^m \sum_{j=1}^n
+    E_{ij}^2                             \\
+     & = \sum_{i=1}^m \sum_{j=1}^n
+    u_i^2v_j^2                           \\
+     & = \sum_{i=1}^m u_i^2 \sum_{j=1}^n
+    v_j^2                                \\
+     & =\sum_{i=1}^m u_i^2\norm{v}_2^2   \\
+     & = \norm{v}_2^2 \sum_{i=1}^m u_i^2 \\
+     & = \norm{v}_2^2 \norm{u}_2^2
+\end{align*}
+
+\textbf{Show} $\norm{E}_F = \norm{E}_2$.
+
+Let $\norm{x}_2 = 1$.
+\begin{align*}
+    \norm{E}_F
+     & = \norm{u}_2\norm{v}_2                                    \\
+     & = \norm{u}_2\norm{v}_2 \norm{x}_2                         \\
+     & \ge \norm{u}_2 |v^T x| \tag*{(Cauchy-Schwarz inequality)} \\
+     & = \norm{uv^Tx}_2                                          \\
+     & = \norm{Ex}_2
+\end{align*}
+
+We need to find the case which makes the equality holds.
+\begin{align*}
+         & \norm{v}_2\norm{x}_2 = |v^Tx|       \\
+    \iff & \norm{v}_2^2\norm{x}_2^2 = (v^Tx)^2 \\
+    \iff & v^Tvx^Tx = v^Txx^Tv                 \\
+    \iff & vx^Tx = xx^Tv                       \\
+    \iff & x = \frac{x^Tx}{x^Tv}v
+\end{align*}
+
+Let $x=kv$, we achieve the equality. Since $\norm{E}_F \ge \norm{Ex}_2$ and $\norm{E}_F = \norm{Ex}_2$ when $x=kv$,
+we conclude ${\norm{E}_F = \sup_{\norm{x}=1}} \norm{Ex}_2 = \norm{E}_2$.
+
+\section*{P2.3.8b}
+\begin{align*}
+    \norm{E}_\infty
+     & = \sup_{\norm{x}_\infty=1} \norm{uv^Tx}_\infty                                 \\
+     & \le \sup_{\norm{x}_\infty=1} \norm{u}_\infty \norm{v^T}_\infty \norm{x}_\infty \\
+     & =\norm{u}_\infty \norm{v^T}_\infty                                             \\
+     & =\norm{u}_\infty \norm{v}_1
+\end{align*}
+
+\section*{P2.3.9}
+
+\begin{align*}
+    \norm{E}_2
+     & = \norm{\frac{(y-As)s^T}{s^Ts}}_2              \\
+     & = \frac{1}{\norm{s}_2^2}\norm{(y-As)s^T}_2     \\
+     & = \frac{1}{\norm{s}_2^2} \sup_{\norm{x}_2=1}
+    \norm{(y-As)s^Tx}_2                               \\
+     & = \frac{1}{\norm{s}_2^2} \sup_{\norm{x}_2=1}
+    |s^Tx| \norm{y-As}_2                              \\
+     & \le \frac{1}{\norm{s}_2^2} \sup_{\norm{x}_2=1}
+    \norm{s}_2\norm{x}_2 \norm{y-As}_2                \\
+     & = \frac{\norm{y-As}_2}{\norm{s}_2}
+\end{align*}
+
+Or we can use the conclusion from P2.3.8.
+Let $E = uv^T$ and $u = y - As$ and $v = \frac{s}{s^Ts}$.
+\begin{align*}
+    \norm{E}_2
+     & = \norm{u}_2\norm{v}_2 \tag*{(P2.3.8)}          \\
+     & = \norm{y-As}_2 \norm{ \frac{s}{s^Ts}}          \\
+     & = \norm{y-As}_2 \frac{\norm{s}_2}{\norm{s}_2^2} \\
+     & = \frac{\norm{y-As}_2}{\norm{s}_2}
+\end{align*}
+
+Thus, we have $\norm{E}_2=\norm{\frac{(y-As)s^T}{s^Ts}}_2 \le \frac{\norm{y-As}_2}{\norm{s}_2}$.
+
+With $(A+E)s=y$,We also have
+\begin{align*}
+         & \norm{Es}_2 = \norm{y-As}_2                                                      \\
+    \iff & \norm{E}_2 \ge \frac{\norm{Es}_2}{\norm{s}_2} = \frac{\norm{y-As}_2}{\norm{s}_2}
+\end{align*}
+
+Since $\norm{E}_2 \ge \frac{\norm{y-As}_2}{\norm{s}_2}$
+and $E=\frac{(y-As)s^T}{s^Ts}$ gives $\norm{E}_2\le \frac{\norm{y-As}_2}{\norm{s}_2}$,
+we $E=\frac{(y-As)s^T}{s^Ts}$ gives the minimum 2-norm of $E$.
+
+\section*{P2.3.10}
+
+\textbf{Find the lower bound}
+
+\begin{align*}
+    \norm{BC}_{\triangle, c}
+     & =  c \max_{i,j}
+    \left|
+    \sum_{k=1}^n B_{ik} C_{kj}
+    \right|                                                               \\
+     & \le c \max_{i,j}
+    \sum_{k=1}^n |B_{ik}||C_{kj}|                                         \\
+     & \le cn \left(\max_{i,j}B_{ij}\right) \left(\max_{i,j}C_{ij}\right) \\
+     & = c \left(\max_{i,j}B_{ij}\right) n \left(\max_{i,j}C_{ij}\right)  \\
+     & = \frac{n}{c}\norm{B}_{\triangle, c}\norm{C}_{\triangle, c}
+\end{align*}
+
+To make $\norm{BC}_{\triangle, c} \le\norm{B}_{\triangle, c}\norm{C}_{\triangle, c} $,
+we need $c\ge n$.
+
+\textbf{Find the case minimizing $c$}
+
+Let $B_{ij}=C_{ij}=1$ for $1 \le i,j \le n$. We have
+\begin{align*}
+    \norm{BC}_{\triangle, c} & = cn \\
+    \norm{B}_{\triangle, c}  & =c   \\
+    \norm{C}_{\triangle, c}  & =c
+\end{align*}
+
+We can simply set $c=n$. Since $c \ge n$, we
+conclude $c_* = n$.
+
+\section*{P2.3.11}
+Suppose $A$ is $m\times n$ and $B$ is $p\times q$.
+
+\begin{align*}
+    \norm{A\otimes B}_F^2
+     & = \sum_{i=1}^{mp} \sum_{j=1}^{nq}
+    |(A\otimes B)_{ij}|                                                         \\
+     & = \sum_{a=1}^m \sum_{b=1}^p \sum_{c=1}^n \sum_{d=1}^q
+    |A_{ac}B_{bd}|                                                              \\
+     & = \sum_{a=1}^m \sum_{c=1}^n |A_{ac}| \sum_{b=1}^p  \sum_{d=1}^q |B_{bd}| \\
+     & = \sum_{a=1}^m \sum_{c=1}^n |A_{ac}| \norm{B}_F^2                        \\
+     & = \norm{B}_F^2  \sum_{a=1}^m \sum_{c=1}^n |A_{ac}|                       \\
+     & =  \norm{B}_F^2  \norm{A}_F^2
+\end{align*}
+
+Thus, $\norm{A\otimes B}_F = \norm{A}_F \norm{B}_F$.
+
+\end{document}
